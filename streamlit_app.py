@@ -50,26 +50,6 @@ def build_embedding_model(input_shape):
     ])
     return model
 
-# Contoh kode untuk membuat dan menyimpan model
-import tensorflow as tf
-
-# Buat model embedding sederhana
-def create_embedding_model(input_shape=(mel_spec_size)):
-    model = tf.keras.Sequential([
-        tf.keras.layers.Input(shape=input_shape),
-        tf.keras.layers.Conv2D(32, 3, activation='relu'),
-        tf.keras.layers.MaxPooling2D(),
-        tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(128, activation='relu'),
-        tf.keras.layers.Dense(64)  # Embedding layer
-    ])
-    return model
-
-# Simpan model
-model.save('embedding_model.keras')
-# atau
-model.save_weights('embedding_weights.h5')
-
 @st.cache_resource
 def load_preprocess():
     p = Path(PREPROCESS_FILE)
@@ -426,5 +406,6 @@ if run:
         st.audio(f)
 
     st.success("Selesai.")
+
 
 
