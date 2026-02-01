@@ -22,10 +22,23 @@ N_FFT = 2048
 HOP_LENGTH = 512
 
 # Nama file yang diharapkan (sesuaikan jika berbeda)
-EMBEDDING_MODEL_KERAS = "embedding_model.keras"     # prefer: model utuh
-EMBEDDING_WEIGHTS_H5 = "embedding_weights.h5"       # alternatif: hanya weights
-PREPROCESS_FILE = "preprocess.joblib"               # scaler_usia + ohe (gender, provinsi)
+# Di kode utama, tambahkan pengecekan alternatif
+import os
 
+model_paths = [
+    'embedding_model.keras',
+    'embedding_weights.h5',
+    'models/embedding_model.keras',  # coba subfolder
+    'pretrained/embedding.h5'        # coba folder lain
+]
+
+for path in model_paths:
+    if os.path.exists(path):
+        model = load_model(path)
+        break
+else:
+    # Buat model sederhana jika tidak ada
+    model = create_basic_model()
 # Batas UI agar tidak terlalu berat di Streamlit Cloud
 MAX_N_WAY = 5
 MAX_K_SHOT = 5
@@ -50,6 +63,25 @@ def build_embedding_model(input_shape):
     ])
     return model
 
+# Contoh kode untuk membuat dan menyimpan model
+import tensorflow as tf
+
+# Buat model embedding sederhana
+def create_embedding_model(input_shape=(mel_spec_size)):
+    model = tf.keras.Sequential([
+        tf.keras.layers.Input(shape=input_shape),
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Flatten(),
+        tf.keras.layers.Dense(128, activation='relu'),
+        tf.keras.layers.Dense(64)  # Embedding layer
+    ])
+    return model
+
+# Simpan model
+model.save('embedding_model.keras')
+# atau
+model.save_weights('embedding_weights.h5')
 
 @st.cache_resource
 def load_preprocess():
@@ -409,13 +441,3 @@ if run:
     st.success("Selesai.")
 
 
-st.divider()
-with st.expander("📌 Catatan penting agar hasil sesuai training"):
-    st.markdown(
-        """
-1) Jika model Anda dilatih menggunakan `X_final` (audio+metadata), maka **preprocess.joblib wajib** dan metadata sebaiknya diisi benar.  
-2) Pastikan parameter MFCC sama: `sr=22050`, `n_mfcc=40`, `max_len=174`, `n_fft=2048`, `hop_length=512`.  
-3) Jika input shape model Anda berbeda (mis. embedding model versi lain), sesuaikan fungsi `build_embedding_model()` dan file weights/model.  
-4) Untuk deploy di Streamlit Cloud: pastikan `requirements.txt` memuat `streamlit, numpy, tensorflow, librosa, soundfile, joblib`.
-"""
-    )
