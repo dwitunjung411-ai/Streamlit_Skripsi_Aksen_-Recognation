@@ -34,6 +34,8 @@ MAX_K_SHOT = 5
 # =========================================================
 # MODEL DEFINITIONS (sesuai notebook Anda - cell build_embedding_model)
 # =========================================================
+mel_spec_size = (128, 64, 1)
+
 def build_embedding_model(input_shape):
     """
     Mengikuti versi yang digunakan di notebook (lebih ringkas):
@@ -406,6 +408,7 @@ if run:
         st.audio(f)
 
     st.success("Selesai.")
+
 
 
 
