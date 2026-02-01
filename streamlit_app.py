@@ -22,23 +22,10 @@ N_FFT = 2048
 HOP_LENGTH = 512
 
 # Nama file yang diharapkan (sesuaikan jika berbeda)
-# Di kode utama, tambahkan pengecekan alternatif
-import os
+EMBEDDING_MODEL_KERAS = "embedding_model.keras"     # prefer: model utuh
+EMBEDDING_WEIGHTS_H5 = "embedding_weights.h5"       # alternatif: hanya weights
+PREPROCESS_FILE = "preprocess.joblib"               # scaler_usia + ohe (gender, provinsi)
 
-model_paths = [
-    'embedding_model.keras',
-    'embedding_weights.h5',
-    'models/embedding_model.keras',  # coba subfolder
-    'pretrained/embedding.h5'        # coba folder lain
-]
-
-for path in model_paths:
-    if os.path.exists(path):
-        model = load_model(path)
-        break
-else:
-    # Buat model sederhana jika tidak ada
-    model = create_basic_model()
 # Batas UI agar tidak terlalu berat di Streamlit Cloud
 MAX_N_WAY = 5
 MAX_K_SHOT = 5
