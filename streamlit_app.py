@@ -234,7 +234,7 @@ with st.sidebar:
     q_query = st.slider("Jumlah query audio", 1, 10, 1)
 
     st.divider()
-    st.header("🧾 Metadata (opsional, tapi penting jika model dilatih pakai meta)")
+    st.header("(🧾 Metadata (opsional, tapi penting jika model dilatih pakai meta)")
     st.header()
     if preprocess is None:
         st.info("preprocess.joblib tidak ditemukan / gagal diload. Metadata tidak dipakai (raw audio features saja).")
@@ -408,6 +408,7 @@ if run:
         st.audio(f)
 
     st.success("Selesai.")
+
 
 
 
